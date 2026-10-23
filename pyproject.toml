@@ -1,0 +1,57 @@
+[project]
+name = "islamic-source-finder"
+version = "0.1.0"
+description = "Islamic Source Finder – PDF, video, and image processing with ChromaDB vector search"
+requires-python = ">=3.12"
+
+dependencies = [
+    # Core
+    "numpy>=1.26.0",
+    "torch>=2.2.0",
+    # Vector DB & Embeddings
+    "chromadb>=0.4.22",
+    "sentence-transformers>=2.5.1",
+    # PDF Processing
+    "PyPDF2>=3.0.1",
+    # Image Processing
+    "Pillow>=10.2.0",
+    "opencv-python>=4.8.0",
+    # Video & Audio Processing
+    "yt-dlp",
+    "moviepy",
+    "openai-whisper",
+    # OCR
+    "pytesseract",
+    # LLM Client
+    "groq",
+    # UI
+    "streamlit",
+    "fastapi>=0.136.3",
+    "python-multipart>=0.0.30",
+    "google-genai>=2.8.0",
+    "mcp>=1.28.0",
+    "httpx>=0.28.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "black>=24.1.0",
+    "isort>=5.13.0",
+    "mypy>=1.8.0",
+]
+
+[tool.setuptools]
+packages = []
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

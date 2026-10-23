@@ -1,0 +1,155 @@
+/* ── Library: the indexed books on a shelf ───────────────────── */
+
+.library {
+  margin: var(--space-3xl) auto 0;
+  max-width: 860px;
+  text-align: center;
+}
+
+.library-title {
+  font-family: var(--font-read);
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-sm);
+}
+
+.library-lede {
+  color: var(--ink-soft);
+  max-width: 36rem;
+  margin: 0 auto var(--space-2xl);
+  text-wrap: pretty;
+}
+
+.shelf {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--shelf-gap);
+  padding: 0 var(--space-sm);
+}
+
+.shelf-group {
+  flex-basis: 0;
+  min-width: 10.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.shelf {
+  --shelf-gap: var(--space-md);
+}
+
+/* The board runs under every group, bridging the gaps between them */
+.shelf-spines {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 11rem;
+  border-bottom: 6px solid var(--rule-strong);
+  margin: 0 calc(var(--shelf-gap) / -2);
+  padding: 0 calc(var(--shelf-gap) / 2);
+}
+
+.spine {
+  --cloth: var(--binding);
+  flex-basis: 0;
+  min-width: 1.4rem;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--gilt);
+  border-radius: 3px 3px 0 0;
+  background:
+    linear-gradient(var(--gilt), var(--gilt)) 0 14% / 100% 2px no-repeat,
+    linear-gradient(var(--gilt), var(--gilt)) 0 18% / 100% 1px no-repeat,
+    linear-gradient(var(--gilt), var(--gilt)) 0 82% / 100% 1px no-repeat,
+    linear-gradient(var(--gilt), var(--gilt)) 0 86% / 100% 2px no-repeat,
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.28)),
+    var(--cloth);
+}
+
+.spine {
+  position: relative;
+}
+
+/* Single-volume books get a tooled panel, like the cover */
+.spine:not(.is-volume)::before {
+  content: '';
+  position: absolute;
+  inset: 28% 10%;
+  border: 1px solid color-mix(in srgb, var(--gilt) 55%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--gilt) 25%, transparent);
+  outline-offset: 3px;
+}
+
+.spine.is-volume {
+  height: 88%;
+}
+
+.spine.is-volume:nth-child(even) {
+  height: 92%;
+}
+
+.spine-numeral {
+  font-family: var(--font-read);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.is-green .spine { --cloth: var(--cloth-green); }
+.is-oxblood .spine { --cloth: var(--cloth-oxblood); height: 96%; }
+.is-indigo .spine { --cloth: var(--cloth-indigo); }
+
+.shelf-label {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-md);
+  text-align: center;
+}
+
+.shelf-name {
+  font-family: var(--font-read);
+  font-weight: 600;
+}
+
+.shelf-count {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .library {
+    margin-top: var(--space-2xl);
+  }
+
+  .shelf {
+    --shelf-gap: var(--space-sm);
+    padding: 0;
+  }
+
+  .shelf-group {
+    min-width: 0;
+  }
+
+  .shelf-group.is-indigo {
+    min-width: 7rem;
+  }
+
+  .shelf-spines {
+    height: 8rem;
+  }
+
+  .spine {
+    min-width: 0.9rem;
+  }
+
+  .spine-numeral {
+    font-size: 0.65rem;
+  }
+
+  .shelf-name {
+    font-size: var(--fs-sm);
+  }
+}

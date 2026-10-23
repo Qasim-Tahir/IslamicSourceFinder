@@ -24,6 +24,7 @@ from PIL import Image
 
 from groq import Groq
 import base64
+from google import genai
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,18 +35,19 @@ class IslamicSourceFinderClient:
     _is_initialized = False
     _model = None
     
-    def __new__(cls, persist_directory: str = "/projects/ISF/chromadb_data"):
+    def __new__(cls, persist_directory: str = "./chroma_data"):
         if cls._instance is None:
             cls._instance = super(IslamicSourceFinderClient, cls).__new__(cls)
         return cls._instance
     
-    def __init__(self, persist_directory: str = "/projects/ISF/chromadb_data"):
+    def __init__(self, persist_directory: str = "./chroma_data"):
         if not self._is_initialized:
             self.persist_directory = persist_directory
             self.client = self._initialize_chromadb()
             self.collection_name = "islamic_scripture"
             self.chunk_size = 1000
             self.processed_files = set()
+            self.gemini_client = genai.Client()
             self._is_initialized = True
             
             # Create or load the collection
@@ -56,7 +58,7 @@ class IslamicSourceFinderClient:
         """Lazy load the model only when needed"""
         if cls._model is None:
             logger.info("Initializing SentenceTransformer model...")
-            cls._model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+            cls._model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
         return cls._model
             
     def _initialize_chromadb(self) -> chromadb.Client:
@@ -252,12 +254,16 @@ class IslamicSourceFinderClient:
                     batch_embeddings = self.get_model().encode(batch)
                     all_embeddings.extend(batch_embeddings.tolist())
 
-            self.collection.add(
-                documents=documents,
-                embeddings=all_embeddings,
-                metadatas=metadatas,
-                ids=ids
-            )
+            # Add to collection in batches to stay under ChromaDB limits
+            storage_batch_size = 2000
+            for i in range(0, len(documents), storage_batch_size):
+                end_idx = min(i + storage_batch_size, len(documents))
+                self.collection.add(
+                    documents=documents[i:end_idx],
+                    embeddings=all_embeddings[i:end_idx],
+                    metadatas=metadatas[i:end_idx],
+                    ids=ids[i:end_idx]
+                )
             
             logger.info(f"Successfully processed and stored {len(documents)} chunks from {file_path}")
         except Exception as e:
@@ -343,20 +349,42 @@ class IslamicSourceFinderClient:
         Split text into chunks while extracting Book # and Hadees # for metadata.
         """
         chunks = []
-        pattern = r"Book (\d+), Number (\d+):"  # Example regex for matching Book and Hadees #
+        
+        # Try Bukhari/Muslim format first
+        pattern = r"Book (\d+), Number (\d+):"
         matches = list(re.finditer(pattern, text))
+        
+        if matches:
+            for i, match in enumerate(matches):
+                start = match.end()
+                end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+                chunk_text = text[start:end].strip()
 
-        for i, match in enumerate(matches):
-            start = match.end()
-            end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
-            chunk_text = text[start:end].strip()
+                chunks.append({
+                    "book_number": match.group(1),
+                    "hadees_number": match.group(2),
+                    "chunk_text": chunk_text
+                })
+            return chunks
 
-            chunks.append({
-                "book_number": match.group(1),
-                "hadees_number": match.group(2),
-                "chunk_text": chunk_text
-            })
+        # Try Tirmidhi format: e.g., "39. Ibn 'Abbas narrated that..."
+        pattern2 = r"(?:^|\n)(\d+)\.\s+(?=[A-Z])"
+        matches2 = list(re.finditer(pattern2, text))
+        
+        if matches2:
+            for i, match in enumerate(matches2):
+                start = match.end()
+                end = matches2[i + 1].start() if i + 1 < len(matches2) else len(text)
+                chunk_text = text[start:end].strip()
+                
+                hadees_number = match.group(1)
 
+                chunks.append({
+                    "book_number": "Unknown",
+                    "hadees_number": hadees_number,
+                    "chunk_text": chunk_text
+                })
+        
         return chunks
 
     def encode_image(self,image_path):
@@ -376,7 +404,7 @@ class IslamicSourceFinderClient:
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "provide only the text in the image"},
+                        {"type": "text", "text": "Extract the religious or scholarly text content from this image. Ignore and exclude any sender information, phone numbers, timestamps, platform names (WhatsApp, Telegram, etc.), or social media metadata. Return only the core text content, in its original language."},
                         {
                             "type": "image_url",
                             "image_url": {
@@ -386,7 +414,8 @@ class IslamicSourceFinderClient:
                     ],
                 }
             ],
-            model="llama-3.2-11b-vision-preview",
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            temperature=0,
         )
         print(chat_completion.choices[0].message.content)
         return chat_completion.choices[0].message.content
@@ -484,7 +513,7 @@ class IslamicSourceFinderClient:
         with open(audio_path, "rb") as file:
             transcription = client.audio.transcriptions.create(
                 file=(audio_path, file.read()),
-                model="whisper-large-v3",
+                model="whisper-large-v3-turbo",
                 response_format="verbose_json",
             )
         return transcription['text']
@@ -507,7 +536,7 @@ class IslamicSourceFinderClient:
         with open(audio_path, "rb") as file:
             transcription = client.audio.transcriptions.create(
                 file=(audio_path, file.read()),
-                model="whisper-large-v3",
+                model="whisper-large-v3-turbo",
                 response_format="verbose_json",
             )
         return transcription.text
