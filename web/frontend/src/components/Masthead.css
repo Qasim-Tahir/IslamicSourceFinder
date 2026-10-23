@@ -1,0 +1,192 @@
+/* ── Masthead: the book cover ────────────────────────────────── */
+
+.masthead {
+  position: relative;
+  isolation: isolate;
+  background: var(--binding);
+  color: var(--on-binding);
+  border-bottom: 6px solid var(--binding-deep);
+  padding-bottom: var(--space-2xl);
+}
+
+/* Book cloth: fine grain, with a little light falling on the middle of the board */
+.masthead::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 30%, rgba(255, 255, 255, 0.07), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.masthead-bar {
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: var(--space-md) var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.wordmark .star-mark {
+  color: var(--gilt);
+}
+
+.server-state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--fs-sm);
+  color: var(--on-binding-soft);
+}
+
+.server-state-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #7FD1A6;
+  box-shadow: 0 0 0 3px rgba(127, 209, 166, 0.18);
+}
+
+.server-state.is-down {
+  color: var(--gilt);
+  font-weight: 700;
+}
+
+.server-state.is-down .server-state-dot {
+  background: var(--gilt);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gilt) 25%, transparent);
+}
+
+/* ── The tooled frame ─────────────────────────────────────── */
+
+.cover {
+  position: relative;
+  width: calc(100% - 2 * var(--gutter));
+  max-width: 1040px;
+  margin: var(--space-sm) auto 0;
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 5vw, 4.5rem) clamp(2.25rem, 5vw, 3.5rem);
+  text-align: center;
+  border: 1.5px solid color-mix(in srgb, var(--gilt) 75%, transparent);
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid color-mix(in srgb, var(--gilt) 35%, transparent);
+  pointer-events: none;
+}
+
+.cover-corner {
+  position: absolute;
+  width: clamp(34px, 6vw, 64px);
+  height: clamp(34px, 6vw, 64px);
+  color: var(--gilt);
+  opacity: 0.85;
+}
+
+.cover-corner.is-tl { top: 12px; left: 12px; }
+.cover-corner.is-tr { top: 12px; right: 12px; transform: scaleX(-1); }
+.cover-corner.is-bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
+.cover-corner.is-br { bottom: 12px; right: 12px; transform: scale(-1); }
+
+.cover-medallion {
+  display: block;
+  width: clamp(56px, 8vw, 84px);
+  height: auto;
+  margin: 0 auto var(--space-lg);
+  color: var(--gilt);
+}
+
+/* Gilt stamping: the one load animation */
+.cover .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: gilt-draw 1.4s cubic-bezier(0.6, 0, 0.2, 1) var(--delay, 0ms) forwards;
+}
+
+.cover .ornament-fill {
+  opacity: 0;
+  animation: gilt-fill 600ms ease 900ms forwards;
+}
+
+@keyframes gilt-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes gilt-fill {
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover .draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .cover .ornament-fill {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ── Title and lede ───────────────────────────────────────── */
+
+.masthead-title {
+  font-family: var(--font-read);
+  font-size: clamp(2.2rem, 1.1rem + 4.4vw, 4.4rem);
+  font-weight: 600;
+  font-optical-sizing: auto;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--gilt);
+  max-width: 15ch;
+  margin: 0 auto var(--space-md);
+  text-wrap: balance;
+}
+
+.masthead-lede {
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--on-binding-soft);
+  max-width: 38rem;
+  margin: 0 auto var(--space-xl);
+  text-wrap: pretty;
+}
+
+@media (max-width: 640px) {
+  .masthead {
+    padding-bottom: var(--space-lg);
+  }
+
+  .cover {
+    width: calc(100% - 1.5rem);
+    padding-top: 3rem;
+  }
+
+  .cover::before {
+    inset: 4px;
+  }
+
+  .cover-corner.is-tl { top: 8px; left: 8px; }
+  .cover-corner.is-tr { top: 8px; right: 8px; }
+  .cover-corner.is-bl { bottom: 8px; left: 8px; }
+  .cover-corner.is-br { bottom: 8px; right: 8px; }
+
+  .masthead-lede {
+    font-size: var(--fs-base);
+  }
+}

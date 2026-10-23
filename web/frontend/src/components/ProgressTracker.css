@@ -1,0 +1,101 @@
+/* ── Progress Tracker (video pipeline) ───────────────────────── */
+
+.progress {
+  margin: var(--space-3xl) auto 0;
+  max-width: 40rem;
+  padding: var(--space-xl);
+  background: var(--sheet);
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px var(--rule), 0 20px 40px -30px var(--book-shadow);
+}
+
+.progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.progress-title {
+  font-family: var(--font-read);
+  font-size: var(--fs-xl);
+}
+
+.progress-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.progress-steps {
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-faint);
+}
+
+.progress-step-marker {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule-strong);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-step.is-active {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.progress-step.is-active .progress-step-marker {
+  border-color: var(--action);
+  border-top-color: transparent;
+  animation: progress-spin 1.1s linear infinite;
+}
+
+.progress-step.is-done {
+  color: var(--ink-soft);
+}
+
+.progress-step.is-done .progress-step-marker {
+  background: var(--action);
+  border-color: var(--action);
+  color: var(--on-action);
+}
+
+@keyframes progress-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* The number shouldn't spin with its ring */
+.progress-step.is-active .progress-step-marker {
+  color: transparent;
+}
+
+.progress-transcript {
+  margin-top: var(--space-lg);
+}
+
+.progress-transcript-title {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  margin-bottom: var(--space-xs);
+}
+
+.progress-transcript p {
+  font-family: var(--font-read);
+  line-height: 1.7;
+  max-height: 10rem;
+  overflow-y: auto;
+}

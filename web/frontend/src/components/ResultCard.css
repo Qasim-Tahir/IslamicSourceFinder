@@ -1,0 +1,169 @@
+/* ── Result passage ──────────────────────────────────────────── */
+
+.passage {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--space-sm);
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--rule);
+}
+
+.passage > :not(.passage-head) {
+  grid-column: 2;
+}
+
+.passage-head {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  margin-bottom: var(--space-sm);
+}
+
+.passage-rank {
+  font-family: var(--font-read);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--ink-faint);
+  font-variant-numeric: lining-nums;
+}
+
+.passage.is-close .passage-rank {
+  color: var(--gilt);
+}
+
+.passage-cite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-sm);
+  font-size: var(--fs-lg);
+}
+
+.passage-collection {
+  font-family: var(--font-read);
+  font-weight: 600;
+}
+
+.passage-ref {
+  font-family: var(--font-ui);
+  font-size: var(--fs-base);
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Match strength: three ticks, then words */
+.strength {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+
+.strength-ticks {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.strength-ticks i {
+  width: 0.9rem;
+  height: 0.3rem;
+  border-radius: 1px;
+  background: var(--rule-strong);
+}
+
+.strength-ticks i.on {
+  background: var(--ink-soft);
+}
+
+.passage.is-close .strength-ticks i.on {
+  background: var(--action);
+}
+
+.passage.is-close .strength-label {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.strength-score {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.passage-text {
+  font-family: var(--font-read);
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  max-width: 68ch;
+  overflow-wrap: anywhere;
+}
+
+.passage-text.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.passage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-lg);
+  margin-top: var(--space-sm);
+}
+
+/* Best match, on the right-hand page of the open book */
+.passage.is-featured {
+  display: block;
+  padding: 0;
+  border-top: 0;
+}
+
+.passage.is-featured .passage-head {
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.passage.is-featured .passage-rank {
+  display: none;
+}
+
+.passage.is-featured .passage-cite {
+  font-size: var(--fs-xl);
+}
+
+.passage.is-featured .passage-text {
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+}
+
+.passage.is-featured .passage-text.is-clamped {
+  -webkit-line-clamp: 12;
+}
+
+.passage.is-featured .passage-actions {
+  margin-top: var(--space-md);
+}
+
+@media (max-width: 640px) {
+  .passage {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+  }
+
+  .passage-cite {
+    font-size: var(--fs-md);
+  }
+
+  .passage-text,
+  .passage.is-featured .passage-text {
+    font-size: var(--fs-base);
+  }
+
+  .passage.is-featured .passage-cite {
+    font-size: var(--fs-lg);
+  }
+}

@@ -1,0 +1,278 @@
+/* ── Search Interface ────────────────────────────────────────── */
+
+.search {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.search-sheet {
+  background: var(--sheet);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--gilt) 30%, transparent),
+    0 2px 0 var(--binding-deep),
+    0 24px 48px -24px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Mode switch ──────────────────────────────────────────── */
+
+.mode-switch {
+  display: flex;
+  gap: var(--space-lg);
+  border-bottom: 1px solid var(--rule);
+  margin: calc(var(--space-md) * -1) calc(var(--space-md) * -1) var(--space-md);
+  padding: 0 var(--space-md);
+  overflow-x: auto;
+}
+
+.mode-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.mode-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mode-option span {
+  display: block;
+  padding: var(--space-md) 0 calc(var(--space-md) - 3px);
+  border-bottom: 3px solid transparent;
+  color: var(--ink-soft);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.mode-option:hover span {
+  color: var(--ink);
+}
+
+.mode-option input:checked + span {
+  color: var(--ink);
+  border-bottom-color: var(--gilt);
+}
+
+.mode-option input:focus-visible + span {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── Fields ───────────────────────────────────────────────── */
+
+.search-textarea,
+.search-input {
+  width: 100%;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--page);
+  padding: var(--space-md);
+  transition: border-color var(--transition);
+}
+
+.search-textarea {
+  font-family: var(--font-read);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.search-textarea:focus,
+.search-input:focus {
+  outline: none;
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 20%, transparent);
+}
+
+.search-textarea::placeholder,
+.search-input::placeholder {
+  color: var(--ink-faint);
+}
+
+.search-input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.field-help {
+  margin-top: var(--space-sm);
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+
+.field-help.is-error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Image drop zone */
+.drop-zone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-height: 8rem;
+  justify-content: center;
+  padding: var(--space-lg);
+  border: 1.5px dashed var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--page);
+  cursor: pointer;
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+.drop-zone:hover,
+.drop-zone.is-over {
+  border-color: var(--focus);
+}
+
+.drop-zone.is-over {
+  background: color-mix(in srgb, var(--focus) 8%, var(--page));
+}
+
+.drop-zone:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.drop-zone-main {
+  font-weight: 600;
+}
+
+.drop-zone-link {
+  color: var(--action);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.drop-zone-hint {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+
+.image-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--page);
+}
+
+.image-preview-thumbnail {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.image-preview-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.image-preview-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-preview-size {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+
+/* ── Actions ──────────────────────────────────────────────── */
+
+.search-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.count-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  margin-right: auto;
+}
+
+.count-field select {
+  min-height: 2.25rem;
+  padding: 0 var(--space-sm);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--sheet);
+  color: var(--ink);
+}
+
+.kbd-hint {
+  font-size: var(--fs-sm);
+  color: var(--ink-faint);
+}
+
+/* ── Examples, on the binding ─────────────────────────────── */
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: var(--space-sm) var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.examples-lead {
+  font-size: var(--fs-sm);
+  color: var(--on-binding-soft);
+}
+
+.example {
+  font-family: var(--font-read);
+  font-style: italic;
+  font-size: var(--fs-sm);
+  color: var(--on-binding);
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--gilt) 60%, transparent);
+  text-underline-offset: 4px;
+  max-width: 100%;
+}
+
+.example:hover:not(:disabled) {
+  text-decoration-color: var(--gilt);
+}
+
+.example:disabled {
+  opacity: 0.5;
+}
+
+.example:focus-visible {
+  outline-color: var(--gilt);
+}
+
+@media (max-width: 640px) {
+  .kbd-hint {
+    display: none;
+  }
+
+  .search-actions .button-primary {
+    flex: 1;
+  }
+
+  .count-field {
+    width: 100%;
+  }
+}

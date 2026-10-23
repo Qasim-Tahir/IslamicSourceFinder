@@ -1,0 +1,233 @@
+/* ── Results Feed ────────────────────────────────────────────── */
+
+.results {
+  margin-top: var(--space-3xl);
+}
+
+.verdict {
+  max-width: 44rem;
+  margin: 0 auto var(--space-2xl);
+  text-align: center;
+  animation: verdict-in 420ms ease-out both;
+}
+
+.verdict-title {
+  font-family: var(--font-read);
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  margin-bottom: var(--space-sm);
+  scroll-margin-top: var(--space-xl);
+  text-wrap: balance;
+}
+
+.verdict-title:focus {
+  outline: none;
+}
+
+.verdict-body {
+  color: var(--ink-soft);
+  font-size: var(--fs-md);
+  text-wrap: pretty;
+}
+
+@keyframes verdict-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── The open book ────────────────────────────────────────── */
+
+.open-book {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--sheet);
+  border-radius: 3px;
+  /* stacked page edges under the spread, then a soft shadow */
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 3px 0 -1px var(--sheet),
+    0 3px 0 0 var(--rule),
+    0 6px 0 -1px var(--sheet),
+    0 6px 0 0 var(--rule),
+    0 28px 50px -30px var(--book-shadow);
+}
+
+/* The gutter where the pages meet */
+.open-book::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 56px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gutter-shade) 46%,
+    var(--gutter-deep) 50%,
+    var(--gutter-shade) 54%,
+    transparent
+  );
+}
+
+.book-page {
+  padding: clamp(1.5rem, 3.5vw, 3rem);
+  min-width: 0;
+}
+
+.book-page.is-searched {
+  padding-right: clamp(2rem, 4.5vw, 3.75rem);
+}
+
+.book-page.is-source {
+  padding-left: clamp(2rem, 4.5vw, 3.75rem);
+}
+
+.page-label,
+.page-sublabel {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: var(--space-md);
+}
+
+.page-sublabel {
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.searched-thumb {
+  width: 100%;
+  max-height: 16rem;
+  object-fit: contain;
+  object-position: left top;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  margin-bottom: var(--space-md);
+}
+
+.searched-text {
+  font-family: var(--font-read);
+  font-style: italic;
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+}
+
+.searched-text.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 12;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.searched-original {
+  font-family: var(--font-read);
+  line-height: 1.65;
+}
+
+.searched-original[lang="ur"] {
+  font-family: var(--font-urdu);
+  font-size: var(--fs-lg);
+  line-height: 2.3;
+  text-align: right;
+}
+
+.book-caption {
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  margin-top: var(--space-lg);
+}
+
+/* ── Other passages ───────────────────────────────────────── */
+
+.others {
+  max-width: 780px;
+  margin: var(--space-3xl) auto 0;
+}
+
+.others-title {
+  font-family: var(--font-read);
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.passages {
+  list-style: none;
+}
+
+/* ── Loading ──────────────────────────────────────────────── */
+
+.results.is-loading {
+  text-align: center;
+}
+
+.results-loading-text {
+  font-family: var(--font-read);
+  font-size: var(--fs-lg);
+  color: var(--ink-soft);
+  margin-bottom: var(--space-xl);
+}
+
+.open-book.is-placeholder .book-page {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.open-book.is-placeholder span {
+  display: block;
+  height: 0.7rem;
+  border-radius: 2px;
+  background: var(--rule);
+  animation: placeholder-pulse 1.6s ease-in-out infinite;
+}
+
+.open-book.is-placeholder span:first-child { width: 35%; margin-bottom: 0.6rem; }
+.open-book.is-placeholder span:nth-child(3) { width: 80%; }
+.open-book.is-placeholder span:nth-child(4) { width: 60%; }
+
+@keyframes placeholder-pulse {
+  50% { opacity: 0.45; }
+}
+
+@media (max-width: 760px) {
+  .open-book {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .open-book::after {
+    display: none;
+  }
+
+  .book-page.is-searched {
+    padding-right: clamp(1.5rem, 3.5vw, 3rem);
+    border-bottom: 1px dashed var(--rule-strong);
+  }
+
+  .book-page.is-source {
+    padding-left: clamp(1.5rem, 3.5vw, 3rem);
+  }
+
+  .searched-text {
+    font-size: var(--fs-md);
+  }
+}
+
+@media (max-width: 640px) {
+  .results {
+    margin-top: var(--space-2xl);
+  }
+
+  .verdict {
+    margin-bottom: var(--space-xl);
+  }
+
+  .verdict-body {
+    font-size: var(--fs-base);
+  }
+}

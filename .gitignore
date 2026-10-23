@@ -1,0 +1,33 @@
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Models, caches and the vector store
+.hf_cache/
+torchinductor_*/
+wheels/
+chroma_data/
+chromadb_data/
+chroma.log
+
+# Source PDFs and media
+*.pdf
+data/
+frames/
+*.mp4
+*.mp3
+*.wav
+*.m4a
+
+# Node
+node_modules/
+dist/
+
+# Local tooling
+.claude/
+.vscode/
